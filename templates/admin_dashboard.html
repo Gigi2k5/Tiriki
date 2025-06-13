@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-6 col-md-3 mb-3">
+        <div class="stats-card">
+            <div class="text-center">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <div class="stats-number">{{ validated_users }}</div>
+                <div class="small">Utilisateurs Validés</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="stats-card">
+            <div class="text-center">
+                <i class="fas fa-ticket-alt fa-2x mb-2"></i>
+                <div class="stats-number">{{ total_tickets }}</div>
+                <div class="small">Tickets Générés</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="stats-card">
+            <div class="text-center">
+                <i class="fas fa-clock fa-2x mb-2"></i>
+                <div class="stats-number">{{ payments|length }}</div>
+                <div class="small">En Attente</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="stats-card">
+            <div class="text-center">
+                <i class="fas fa-ticket-alt fa-2x mb-2"></i>
+                <div class="stats-number">{{ remaining_tickets }}</div>
+                <div class="small">Tickets Restants</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation par onglets -->
+<div class="row">
+    <div class="col-12">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">
+                    <i class="fas fa-clock me-2"></i>Paiements en Attente ({{ payments|length }})
+                </button>
+                <button class="nav-link" id="nav-tickets-tab" data-bs-toggle="tab" data-bs-target="#nav-tickets" type="button" role="tab" aria-controls="nav-tickets" aria-selected="false">
+                    <i class="fas fa-list me-2"></i>Tickets Distribués ({{ distributed_tickets|length }})
+                </button>
+            </div>
+        </nav>
+        
+        <div class="tab-content" id="nav-tabContent">
+            <!-- Onglet Paiements en Attente -->
+            <div class="tab-pane fade show active" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
+                <div class="card">
+                    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <h5 class="mb-2 mb-md-0"><i class="fas fa-list me-2"></i>Paiements en Attente</h5>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <a href="{{ url_for('export_csv') }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download me-1"></i>Export CSV
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if payments %}
+                        <!-- Table pour écrans moyens et grands -->
+                        <div class="table-responsive-stack">
+                            <table class="table table-striped mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Nom Complet</th>
+                                        <th>Téléphone</th>
+                                        <th>Email</th>
+                                        <th>Référence</th>
+                                        <th>Montant</th>
+                                        <th>Tickets</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for payment in payments %}
+                                    <tr>
+                                        <td>{{ payment[8][:16] }}</td>
+                                        <td>{{ payment[1] }} {{ payment[2] }}</td>
+                                        <td>
+                                            <span class="badge bg-info">{{ payment[3] }}</span>
+                                        </td>
+                                        <td class="text-truncate" style="max-width: 150px;">{{ payment[4] }}</td>
+                                        <td>
+                                            <code class="small">{{ payment[5] }}</code>
+                                        </td>
+                                        <td>
+                                            <strong class="text-success">{{ payment[6] }} FCFA</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ payment[7] }}</span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('validate_payment', payment_id=payment[0]) }}" 
+                                               class="btn btn-success btn-sm"
+                                               onclick="return confirm('Confirmer la validation de ce paiement ?')">
+                                                <i class="fas fa-check me-1"></i>Valider
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Cards pour petits écrans -->
+                        <div class="table-mobile-card p-3">
+                            {% for payment in payments %}
+                            <div class="card mb-3 border-left-primary">
+                                <div class="card-body p-3">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <h6 class="mb-2 text-primary">{{ payment[1] }} {{ payment[2] }}</h6>
+                                            <p class="mb-1 small">
+                                                <i class="fas fa-phone me-1"></i>
+                                                <span class="badge bg-info">{{ payment[3] }}</span>
+                                            </p>
+                                            <p class="mb-1 small text-truncate">
+                                                <i class="fas fa-envelope me-1"></i>{{ payment[4] }}
+                                            </p>
+                                            <p class="mb-1 small">
+                                                <i class="fas fa-code me-1"></i>
+                                                <code>{{ payment[5] }}</code>
+                                            </p>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <div class="mb-2">
+                                                <strong class="text-success d-block">{{ payment[6] }} FCFA</strong>
+                                                <span class="badge bg-primary">{{ payment[7] }} tickets</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <small class="text-muted">{{ payment[8][:16] }}</small>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <a href="{{ url_for('validate_payment', payment_id=payment[0]) }}" 
+                                               class="btn btn-success btn-sm w-100"
+                                               onclick="return confirm('Confirmer la validation ?')">
+                                                <i class="fas fa-check me-1"></i>Valider
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                            <h4>Aucun paiement en attente</h4>
+                            <p class="text-muted">Tous les paiements ont été validés !</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Tickets Distribués -->
+            <div class="tab-pane fade" id="nav-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
+                <div class="card">
+                    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <h5 class="mb-2 mb-md-0"><i class="fas fa-ticket-alt me-2"></i>Tickets Distribués</h5>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-success fs-6">Total : {{ distributed_tickets|length }} tickets</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if distributed_tickets %}
+                        <!-- Table pour écrans moyens et grands -->
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>N° Ticket</th>
+                                        <th>Propriétaire</th>
+                                        <th>Téléphone</th>
+                                        <th>Email</th>
+                                        <th>Date Attribution</th>
+                                        <th>Nb Total Tickets</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ticket in distributed_tickets %}
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-warning text-dark fs-6">#{{ ticket[0] }}</span>
+                                        </td>
+                                        <td>
+                                            <strong>{{ ticket[1] }} {{ ticket[2] }}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">{{ ticket[3] }}</span>
+                                        </td>
+                                        <td class="text-truncate" style="max-width: 200px;">
+                                            {{ ticket[4] }}
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ ticket[5][:16] }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ ticket[6] }}</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Cards pour petits écrans -->
+                        <div class="d-md-none p-3">
+                            {% for ticket in distributed_tickets %}
+                            <div class="card mb-3 border-success">
+                                <div class="card-body p-3">
+                                    <div class="row">
+                                        <div class="col-4 text-center">
+                                            <span class="badge bg-warning text-dark fs-5 mb-2">#{{ ticket[0] }}</span>
+                                            <br>
+                                            <span class="badge bg-primary">{{ ticket[6] }} tickets</span>
+                                        </div>
+                                        <div class="col-8">
+                                            <h6 class="mb-2 text-success">{{ ticket[1] }} {{ ticket[2] }}</h6>
+                                            <p class="mb-1 small">
+                                                <i class="fas fa-phone me-1"></i>
+                                                <span class="badge bg-info">{{ ticket[3] }}</span>
+                                            </p>
+                                            <p class="mb-1 small text-truncate">
+                                                <i class="fas fa-envelope me-1"></i>{{ ticket[4] }}
+                                            </p>
+                                            <p class="mb-0 small text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ ticket[5][:16] }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                            <h4>Aucun ticket distribué</h4>
+                            <p class="text-muted">Les tickets apparaîtront ici après validation des paiements.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Instructions de Validation</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h6>Processus de Validation :</h6>
+                        <ol class="small">
+                            <li>Vérifiez le paiement MTN MoMo reçu</li>
+                            <li>Confirmez que la référence correspond</li>
+                            <li>Cliquez sur "Valider" pour générer les tickets</li>
+                            <li>L'utilisateur recevra une notification automatique</li>
+                        </ol>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6>Format de Référence :</h6>
+                        <p class="small"><code>NuméroTéléphone-NombreTickets</code></p>
+                        <p class="text-muted small mb-2">
+                            Exemple : 05123456-5 = 5 tickets pour le 05123456
+                        </p>
+                        <div class="alert alert-warning small">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Important :</strong> Une fois validé, l'action ne peut pas être annulée.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+setTimeout(function() {
+    location.reload();
+}, 30000);
+
+function confirmValidation(paymentId) {
+    if (confirm('Êtes-vous sûr de vouloir valider ce paiement ?\n\nCette action générera les tickets et ne pourra pas être annulée.')) {
+        window.location.href = '/admin/validate/' + paymentId;
+    }
+}
+</script>
+{% endblock %}

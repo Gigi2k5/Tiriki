@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tiriki - Tombola Numérique{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand {
+            color: #ff6b35 !important;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-height: 44px; /* Touch-friendly height */
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            min-height: 44px;
+            padding: 12px 20px;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            min-height: 44px;
+            padding: 12px 20px;
+        }
+        
+        .btn-sm {
+            min-height: 38px;
+            padding: 8px 16px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            transition: all 0.3s ease;
+            font-size: 16px; /* Prevent zoom on iOS */
+            min-height: 50px;
+        }
+        
+        .form-control:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.5rem;
+        }
+        
+        .ticket-number {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            margin: 8px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 200px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        
+        .clover-icon {
+            color: #1e3c72;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        /* Responsive table */
+        .table-responsive-stack {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table-responsive-stack table {
+            min-width: 700px;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .stats-card {
+                padding: 20px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+            
+            .card {
+                margin-bottom: 20px;
+            }
+            
+            .card-body {
+                padding: 20px 15px;
+            }
+            
+            .ticket-number {
+                padding: 8px 15px;
+                margin: 5px;
+                font-size: 1rem;
+            }
+            
+            .btn-lg {
+                padding: 15px 25px;
+                font-size: 1rem;
+            }
+            
+            .alert {
+                padding: 15px;
+                font-size: 0.95rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            h3 {
+                font-size: 1.5rem;
+            }
+            
+            h4 {
+                font-size: 1.3rem;
+            }
+            
+            .lead {
+                font-size: 1.1rem;
+            }
+            
+            /* Stack cards vertically on mobile */
+            .row .col-md-6,
+            .row .col-md-4 {
+                margin-bottom: 20px;
+            }
+            
+            /* Better spacing for mobile forms */
+            .form-group,
+            .mb-3,
+            .mb-4 {
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Mobile table cards */
+            .table-mobile-card {
+                display: none;
+            }
+            
+            @media (max-width: 576px) {
+                .table-responsive-stack {
+                    display: none;
+                }
+                
+                .table-mobile-card {
+                    display: block;
+                }
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+            
+            .stats-card {
+                padding: 15px;
+            }
+            
+            .stats-number {
+                font-size: 1.8rem;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+            }
+            
+            .ticket-number {
+                padding: 6px 12px;
+                margin: 3px;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-clover clover-icon"></i>Tiriki
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Accueil</a>
+                    </li>
+                    {% if session.user_id %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('espace_personnel') }}">Mon Espace</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Déconnexion</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('inscription') }}">S'inscrire</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('connexion') }}">Connexion</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2024 Tiriki - Tombola Numérique Sécurisée</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

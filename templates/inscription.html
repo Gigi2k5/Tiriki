@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-11 col-md-9 col-lg-8">
+        <div class="card">
+            <div class="card-header text-center bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-user-plus me-2"></i>Inscription à la Tombola
+                </h3>
+            </div>
+            <div class="card-body p-3 p-sm-4 p-lg-5">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="nom" class="form-label">
+                                <i class="fas fa-user me-2"></i>Nom
+                            </label>
+                            <input type="text" class="form-control" id="nom" name="nom" 
+                                   placeholder="Votre nom" required>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="prenom" class="form-label">
+                                <i class="fas fa-user me-2"></i>Prénom
+                            </label>
+                            <input type="text" class="form-control" id="prenom" name="prenom" 
+                                   placeholder="Votre prénom" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Email
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="votre.email@exemple.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telephone" class="form-label">
+                            <i class="fas fa-phone me-2"></i>Numéro de Téléphone
+                        </label>
+                        <input type="tel" class="form-control" id="telephone" name="telephone" 
+                               placeholder="Ex: 05123456" required>
+                        <div class="form-text small">Ce numéro servira pour la référence MTN MoMo</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Mot de Passe
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Choisissez un mot de passe" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="nb_tickets" class="form-label">
+                            <i class="fas fa-ticket-alt me-2"></i>Nombre de Tickets (1 à 20)
+                        </label>
+                        <select class="form-control" id="nb_tickets" name="nb_tickets" required>
+                            <option value="">Choisir le nombre de tickets</option>
+                            {% for i in range(1, 21) %}
+                                <option value="{{ i }}">{{ i }} ticket{{ 's' if i > 1 else '' }} - {{ i * 100 }} FCFA</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h6 class="mb-2">
+                            <i class="fas fa-info-circle me-2"></i>Instructions de Paiement
+                        </h6>
+                        <p class="mb-2 small">Après inscription, vous devrez :</p>
+                        <ol class="mb-0 small">
+                            <li>Envoyer le montant via MTN MoMo</li>
+                            <li>Utiliser comme référence : <strong>VotreNuméro-NombreTickets</strong></li>
+                            <li>Attendre la validation (sous 24h)</li>
+                        </ol>
+                    </div>
+
+                    <div class="d-grid d-sm-flex gap-2 justify-content-sm-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>S'inscrire
+                        </button>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Retour
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mt-3 mt-md-4">
+            <p class="text-white">
+                Déjà inscrit ? 
+                <a href="{{ url_for('connexion') }}" class="text-warning fw-bold">Se connecter</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

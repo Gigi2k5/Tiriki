@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+        <div class="logo-container">
+            <i class="fas fa-clover" style="font-size: 3rem; color: #ff6b35;" class="d-none d-sm-inline"></i>
+            <i class="fas fa-clover" style="font-size: 4rem; color: #ff6b35;" class="d-sm-none"></i>
+            <h1 class="text-white mt-3 mb-3 fs-2 fs-sm-1">Bienvenue sur Tiriki</h1>
+            <p class="text-white-50 lead fs-5 fs-sm-4">La tombola numérique sécurisée</p>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-3 p-sm-4 p-lg-5">
+                <h2 class="card-title text-center mb-4 fs-3 fs-sm-2">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    Comment Participer ?
+                </h2>
+                
+                <div class="row">
+                    <div class="col-12 col-md-4 text-center mb-4">
+                        <div class="p-3 p-md-4">
+                            <i class="fas fa-user-plus fa-2x fa-sm-3x text-primary mb-3"></i>
+                            <h4 class="fs-5 fs-sm-4">1. Inscription</h4>
+                            <p class="small">Créez votre compte et choisissez le nombre de tickets (1 à 20 maximum)</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 text-center mb-4">
+                        <div class="p-3 p-md-4">
+                            <i class="fas fa-mobile-alt fa-2x fa-sm-3x text-success mb-3"></i>
+                            <h4 class="fs-5 fs-sm-4">2. Paiement MTN MoMo</h4>
+                            <p class="small">Envoyez le montant au numéro ci-dessous avec votre référence</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 text-center mb-4">
+                        <div class="p-3 p-md-4">
+                            <i class="fas fa-ticket-alt fa-2x fa-sm-3x text-warning mb-3"></i>
+                            <h4 class="fs-5 fs-sm-4">3. Récupération</h4>
+                            <p class="small">Une fois validé, connectez-vous pour voir vos numéros de tickets</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info text-center mt-4">
+                    <h3 class="fs-4 fs-sm-3 mb-3">
+                        <i class="fas fa-mobile-alt me-2"></i>Numéro MTN MoMo
+                    </h3>
+                    <h2 class="text-primary fs-2 fs-sm-1 mb-3">{{ mtn_number }}</h2>
+                    <div class="small">
+                        <strong>Nom affiché :</strong> AIKPON Montand-junior <br>
+                        <strong>Format de référence :</strong> VotreNuméro-NombreTickets<br>
+                        <em>Exemple : 0155950904-3 (pour 3 tickets)</em>
+                    </div>
+                </div>
+
+                <div class="row mt-4 mt-md-5">
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0 fs-6 fs-sm-5">
+                                    <i class="fas fa-info-circle me-2"></i>Règles
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-check text-success me-2"></i>Maximum 20 tickets par personne
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-check text-success me-2"></i>Un seul compte par numéro de téléphone
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-check text-success me-2"></i>Prix : <strong>100 FCFA par ticket</strong>
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-check text-success me-2"></i>Numéros de tickets de 1 à 2000
+                                    </li>
+                                    <li class="small">
+                                        <i class="fas fa-check text-success me-2"></i>Validation manuelle des paiements
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="card border-warning h-100">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0 fs-6 fs-sm-5">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Important
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-clock text-warning me-2"></i>Validation sous 24h
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-shield-alt text-success me-2"></i>Système 100% sécurisé
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-download text-primary me-2"></i>Export pour audit
+                                    </li>
+                                    <li class="mb-2 small">
+                                        <i class="fas fa-database text-secondary me-2"></i>Sauvegarde quotidienne
+                                    </li>
+                                    <li class="small">
+                                        <i class="fas fa-random text-info me-2"></i>Attribution aléatoire des numéros
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 mt-md-5">
+                    <div class="d-grid d-sm-flex gap-2 gap-sm-3 justify-content-sm-center">
+                        <a href="{{ url_for('inscription') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>S'inscrire Maintenant
+                        </a>
+                        <a href="{{ url_for('connexion') }}" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Se Connecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

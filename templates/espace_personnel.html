@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Mes Informations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-4 col-sm-3"><strong>Nom :</strong></div>
+                    <div class="col-8 col-sm-9">{{ user[0] }} {{ user[1] }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 col-sm-3"><strong>Email :</strong></div>
+                    <div class="col-8 col-sm-9 text-break">{{ user[2] }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 col-sm-3"><strong>Téléphone :</strong></div>
+                    <div class="col-8 col-sm-9">{{ user[3] }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 col-sm-3"><strong>Tickets :</strong></div>
+                    <div class="col-8 col-sm-9">{{ user[4] }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 col-sm-3"><strong>Statut :</strong></div>
+                    <div class="col-8 col-sm-9">
+                        {% if user[5] %}
+                            <span class="badge bg-success">Validé</span>
+                        {% else %}
+                            <span class="badge bg-warning">En attente</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not user[5] %}
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>En Attente de Validation</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Votre paiement n'a pas encore été validé.</p>
+                <div class="alert alert-info">
+                    <strong>Référence à utiliser :</strong><br>
+                    <code class="fs-6">{{ user[3] }}-{{ user[4] }}</code>
+                </div>
+                <div class="alert alert-success">
+                    <p class="mb-2">
+                        <strong>Montant à envoyer :</strong><br>
+                        <span class="fs-5 text-success">{{ user[4] * ticket_price }} FCFA</span>
+                    </p>
+                    <p class="small mb-0">
+                        Validation sous 24h maximum.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-8">
+        {% if user[5] and tickets %}
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Mes Numéros de Tickets</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Félicitations ! Vous avez <strong>{{ tickets|length }} ticket{{ 's' if tickets|length > 1 else '' }}</strong>
+                </div>
+                
+                <div class="text-center mb-4">
+                    <div class="row">
+                        {% for ticket in tickets %}
+                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2">
+                            <span class="ticket-number d-block">{{ ticket }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Important :</strong> Conservez précieusement ces numéros pour le tirage au sort !
+                </div>
+            </div>
+        </div>
+        {% elif user[5] and not tickets %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                <h4>Erreur de Validation</h4>
+                <p class="mb-3">Votre compte est validé mais aucun ticket n'a été généré.</p>
+                <div class="alert alert-warning">
+                    <p class="mb-0">Contactez l'administrateur pour résoudre ce problème.</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-4">
+                <i class="fas fa-hourglass-half fa-3x text-warning mb-3"></i>
+                <h4>Validation en Cours</h4>
+                <p class="mb-3">Votre inscription a été enregistrée avec succès !</p>
+                <p class="mb-4">Effectuez le paiement MTN MoMo et attendez la validation.</p>
+                
+                <div class="alert alert-info">
+                    <h6 class="mb-3"><i class="fas fa-mobile-alt me-2"></i>Instructions de Paiement</h6>
+                    <div class="row text-start">
+                        <div class="col-12">
+                            <ol class="mb-0">
+                                <li class="mb-2">Ouvrez votre application MTN MoMo</li>
+                                <li class="mb-2">Envoyez <strong class="text-success">{{ user[4] * ticket_price }} FCFA</strong></li>
+                                <li class="mb-2">Utilisez la référence : <strong class="text-primary">{{ user[3] }}-{{ user[4] }}</strong></li>
+                                <li>Attendez la validation (sous 24h)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <small>
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Assurez-vous d'utiliser exactement la référence indiquée pour une validation rapide.
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-lg">
+        <i class="fas fa-sign-out-alt me-2"></i>Se Déconnecter
+    </a>
+</div>
+{% endblock %}

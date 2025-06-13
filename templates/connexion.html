@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header text-center bg-success text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                </h3>
+            </div>
+            <div class="card-body p-3 p-sm-4 p-lg-5">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Email
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="Votre adresse email" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Mot de Passe
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Votre mot de passe" required>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Se Connecter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mt-3 mt-md-4">
+            <p class="text-white mb-2">
+                Pas encore inscrit ? 
+                <a href="{{ url_for('inscription') }}" class="text-warning fw-bold">S'inscrire maintenant</a>
+            </p>
+            <a href="{{ url_for('home') }}" class="text-white-50 text-decoration-none">
+                <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
